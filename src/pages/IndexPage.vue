@@ -30,14 +30,14 @@
       <LessonsComponent />
     </div>
     <div class="row justify-between text-left">
-      <div class="col-7 col-xs-12">
+      <div class="col-md-7 col-xs-12">
         <h3 class="text-h5 mark">У цьому епізоді ви дізнаєтесь:</h3>
         <ol>
           <li>{{ currentLesson.subtitle }}</li>
           <li>{{ currentLesson.description }}</li>
         </ol>
       </div>
-      <div class="col-4 col-xs-12">
+      <div class="col-md-4 col-xs-12">
         <h3 class="text-h5">
           Вже переглянули? Отримайте доступ до наступного:
         </h3>

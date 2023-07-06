@@ -21,11 +21,11 @@
 
     <div class="row justify-between items-center">
       <div class="col-md-7 col-xs-12">
-        <video
-          :src="currentLesson.video_url"
-          controls
-          @ended="onVideoEnded(currentLesson.id)"
-        ></video>
+        <div
+          style="max-width: 100%; height: 400px"
+          ref="player"
+          :data-id="videoId"
+        />
       </div>
       <LessonsComponent />
     </div>
@@ -60,6 +60,9 @@ import LessonsComponent from '../components/LessonsComponent.vue';
 import { useLessonStore } from '../stores/store';
 import { computed } from 'vue';
 
+import { usePlayer, PlayerState } from '@vue-youtube/core';
+import { ref } from 'vue';
+
 const lessonsStore = useLessonStore();
 
 lessonsStore.setCurrentLessonOnMounted();
@@ -68,9 +71,29 @@ const currentLesson = computed(() => {
   return lessonsStore.currentLesson;
 });
 
+const videoId = computed(() => {
+  return currentLesson.value.video_url;
+});
+
+const player = ref();
+
+const { onStateChange } = usePlayer(videoId, player, {
+  playerVars: {
+    controls: 1,
+    disablekb: 1,
+    enablejsapi: 1,
+  },
+});
+
 const onVideoEnded = (id: number) => {
   lessonsStore.enableNext(id);
 };
+
+onStateChange((event) => {
+  if (event.data == PlayerState.ENDED) {
+    onVideoEnded(currentLesson.value.id);
+  }
+});
 
 const moveToNextLesson = (id: number) => {
   lessonsStore.moveToNextLesson(id);
